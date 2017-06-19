@@ -1,0 +1,5 @@
+- title : Building microservices with F#
+- description : Introduction into microservice based architecture with samples in F#
+- author : Alexander Mogilka
+- theme : night
+- transition : default
