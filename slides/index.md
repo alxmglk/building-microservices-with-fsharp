@@ -18,15 +18,6 @@ Alexander Mogilka
 <img src="images/monolith.png" style="background: transparent; border-style: none;"  />
 
 ---
-## Conway's Law
-<i>Any organization that designs a system will inevitably produce a design whose structure is a copy of the organization's communication structure</i>
-
----
-## Conway's Law in the wild
-
-<img src="images/monolith-team-structure.png" width="65%" style="background: transparent; border-style: none" />
-
----
 ## Limitations and possible issues
 
 * it’s difficult to distribute responsibility across the team members and manage release cycle as project and team size grow
@@ -39,21 +30,20 @@ Alexander Mogilka
 [Monolith First](https://martinfowler.com/bliki/MonolithFirst.html)
 
 ***
-## Microservices
+## Microservices to the rescue
 <img src="images/microservices.png" style="background: transparent; border-style: none;"  />
 
 #### Small autonomous services that work together
 
 ---
 ## Benefits of the microservices
-* idependent release cycle of each service which ensures lightweight deployments
-* improved scalability
+* idependent release cycle of each service which ensures more lightweight deployments
+* drastically improved scalability
 * freedom to choose the tech stack suitable for particular task
-* each team is responsible for its own set of the microservices
 
 ---
 ## How about challenges?
-### Welcome to <strike>hell</strike> world of distributed systems
+### Welcome to <strike>hell</strike> the world of distributed systems
 * everything fails all the time
 * additional overhead of the remote calls
 * maintain outbound contracts of the microservices
@@ -61,24 +51,36 @@ Alexander Mogilka
 
 ***
 ## Minimaze the impact of failures
-* fail fast
-    * circuit breaker
-    * explicitly set execution timeouts
-* retries
 * eliminate synchronous calls
+* fail fast
+* retries
 
 ---
-## Samples in F#
+## Synchronous calls are pure evil
+The presence of synchronous calls multiplies the impact on consumers in case of timeouts and failures
+
+---
+## Circuit breaker
+<img src="images/circuit-breaker.png" width="350px" style="background: transparent; border-style: none;"  />
+
+[https://martinfowler.com/bliki/CircuitBreaker.html](https://martinfowler.com/bliki/CircuitBreaker.html)
+
+---
+## It's easy to address cross-cutting concerns in F#
+    type AsyncArrow<'a,'b> = 'a -> Async<'b>  
+
+
 
 ***
 ## Make failures discoverable
 * collect and aggregate logs
     * don't forget about correlation ids
-* collect and aggregate stats
-* monitoring and notifications
+* collect and aggregate metrics
+* monitoring
 
 ---
 ## Samples in F#
+
 
 ***
 ## Consumer first
