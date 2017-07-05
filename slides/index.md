@@ -50,13 +50,13 @@ https://martinfowler.com/bliki/MonolithFirst.html
 * increased operational costs
 
 ***
-## Minimaze the impact of failures
+## Reduce the impact of failures
 * don't ever use synchronous calls
 * fail fast
 * minimize allotted timeouts
-* apply wise retry policies
+* make failures observable
 
----
+***
 ## Synchronous calls are pure evil
 A bunch of parallel synchronous calls will suddenly exhaust the thread pool
 
@@ -68,7 +68,7 @@ A bunch of parallel synchronous calls will suddenly exhaust the thread pool
     let getMerchantDiscount merchantId = ...
     // ProductId -> MerchantDiscount -> Async<ProductPrice>
     let getProductPrice productId discount = ...
-    
+
     // 1st approach : async workflow
     // Async<ProductPrice>
     async {
@@ -79,7 +79,7 @@ A bunch of parallel synchronous calls will suddenly exhaust the thread pool
     // MerchantId -> Async<ProductPrice>
     getMerchantDiscount >> Async.bind (getProductPrice productId)
 
----
+***
 ## Why it's important to fail fast
 Slow failures propagate from the dependencies up to the consumers
 
@@ -92,15 +92,16 @@ Slow failures propagate from the dependencies up to the consumers
 [https://martinfowler.com/bliki/CircuitBreaker.html](https://martinfowler.com/bliki/CircuitBreaker.html)
 
 ---
-## It's easy to adhere retries and circuit breaker with F#
+## Circuit breaker and retries in the wild
     type AsyncArrow<'a,'b> = 'a -> Async<'b>
     
     // AsyncArrow<Guid, HttpResponseMessage>
-    let getProductPriceFromRemoteService productId = ...
+    let getProductPrice productId = ...
 
     // AsyncArrow<Guid, HttpResponseMessage> - the signature is still the same
     let execute = 
-        getProductPriceFromRemoteService
+        getProductPrice
+        |> AsyncArrow.after (updateInvoice invoice)
         |> AsyncArrow.retry retryCount backoffStrategy
         |> AsyncArrow.circuitBreaker circuitBreakerPolicy
 
@@ -112,15 +113,49 @@ Slow failures propagate from the dependencies up to the consumers
 * monitoring
 
 ---
-## Samples in F#
+## Seamless incorporation of the logging
+    let logStart _ = log.Info "Import started"
+    let logFinish _ _ = log.Info "Import finished"
+    let logError ex = 
+        sprintf "An error has occured during the import: %s" ex.Message 
+        |> log.Error 
 
+    importProducts
+    |> updateInventory
+    |> AsyncArrow.before logStart
+    |> AsyncArrow.after logFinish
+    |> AsyncArrow.onError logError
+
+---
+## Correlation Ids
+<img src="images/microservices-correlation-id.png" style="background: transparent; border-style: none;"  />
+
+---
+## Inject correlation id into the service request
+    // HttpRequestMessage -> Async<HttpResponseMessage>
+    let makeHttpRequest = ...
+
+    // HttpRequestMessage -> HttpRequestMessage
+    let injectCorrelationId correlationId (req : HttpRequestMessage) =
+        req.Headers.Add ("Correlation-Id", correlationId)
+        req
+
+    // HttpRequestMessage -> Async<HttpResponseMessage>
+    let makeHttpRequestWithCorrelationId = 
+        makeHttpRequest 
+        |> AsyncArrow.mapIn (injectCorrelationId correlationId)
 
 ***
-## Consumer first
+## API Evolution
 * strangler pattern for evolving API
 * Postel's law
 * write consumer tests on the API and run them on each check in of the producer
 * avoid non-explicit serialization
+
+***
+## Functional composition is a powerful technique
+
+Due to rich capabilities of functional composition you could easily address cross-cutting concerns (retries, timeouts, logging etc) without any changes to your business logic
 
 ***
 ## Embrace the culture of automation
@@ -131,90 +166,10 @@ Slow failures propagate from the dependencies up to the consumers
 * 
 
 ***
-## Why F# is great for the microservices?
-
-TL;DR - it reduces the overall complexity and thus simplifies your life
-
-***
-## Null is a pure evil
-Try to escape from the world of nulls into the functional world of options as soon as possible
-
-<small data-markdown>
-[Null References: The Billion Dollar Mistake](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare)
-</small>
-
----
-## Null checks vs options
-    // Explicit null check
-    let toInt (value : string) =
-        if (value <> null) then
-            Int32.Parse value |> Some
-        else
-            None
-    
-    // World of options
-    let toInt (value : string) =
-        value |> Option.ofObj |> Option.map Int32.Parse
----
-## A world without null checks
-* the execution flow is streamlined
-* no implicit assumptions regarding the meaning of null
-* no need to care about null checks
-
-***
-## Ease of domain modeling
-By leveraging the algebraic data types you could easily build a rich self-describing domain model and make illegal states irrepresentable
-
-<small data-markdown>
-[The "Designing with types" series](https://fsharpforfunandprofit.com/series/designing-with-types.html)
-</small>
-
----
-## Example of a model
-
-    type ContactInfo = 
-    | EmailOnly of EmailContactInfo
-    | PostOnly of PostalContactInfo
-    | EmailAndPost of EmailContactInfo * PostalContactInfo
-
-    type Contact = {
-        Name: Name
-        ContactInfo: ContactInfo
-    }
-
-***
-## Rich set of compile-time checks
-
-    type Command = 
-    | Create of string
-    | Deactivate    
-    | Rename of string
-
-    let handle id = function
-    | Create name -> isValidName name <?> create
-    | Deactivate -> isInactive id <?> deactivate
-    | Rename name ->  isValidName name <?> rename
-
-***
-## Agility of the functional architecture
-You can easily adjust the execution flow and address cross-cutting concerns without affecting the core domain logic as long as you get along with functional architecture
-
-<small data-markdown>
-[Functional architecture is ports and adapters](http://blog.ploeh.dk/2016/03/18/functional-architecture-is-ports-and-adapters/)
-</small>
-
----
-## Example
-
-***
-## A number of idiomatic patterns for modelling interservice communication
-* AsyncArrow
-* AsyncSeq
-
-***
 ## Conclusions
-* Microservices architecture give you a lot of perks but in the same time requires a decent level of expertise for the team
-* F# and functional approach is great for the microservices
+* Microservices architecture gives you a lot of perks but in the same time requires a decent level of expertise for the team
+* F# and functional approach work greate for the microservices
+* 
 
 ***
 ## Questions?
