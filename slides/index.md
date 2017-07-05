@@ -72,6 +72,7 @@ A bunch of parallel synchronous calls will suddenly exhaust the thread pool
     // 1st approach : async workflow
     // Async<ProductPrice>
     async {
+        // MerchantDiscount
         let! discount = getMerchantDiscount merchantId
         return! getProductPrice productId discount
     }
@@ -140,7 +141,7 @@ Slow failures propagate from the dependencies up to the consumers
         req.Headers.Add ("Correlation-Id", correlationId)
         req
 
-    // HttpRequestMessage -> Async<HttpRespo    nseMessage>
+    // HttpRequestMessage -> Async<HttpResponseMessage>
     let makeHttpRequestWithCorrelationId = 
         makeHttpRequest 
         |> AsyncArrow.mapIn (injectCorrelationId correlationId)
@@ -151,7 +152,7 @@ Slow failures propagate from the dependencies up to the consumers
 * setup triggers to be able to react quickly to the deviations and failures in your infrastructure and services
 
 ***
-## Functional composition is a powerful technique
+## Functional composition is a powerful feature
 
 Due to rich capabilities of functional composition you could easily address cross-cutting concerns like retries, timeouts, logging etc without any affects to your business logic
 
@@ -166,12 +167,40 @@ Due to rich capabilities of functional composition you could easily address cros
 ## Postel's law
 Be conservative in what you send, be liberal in what you accept
 
+---
+## Explicit serialization
+
+     type User = {
+        Id : Guid
+        Name : string
+    }
+    with
+        static member ToJson(x : User) =
+            seq {
+                yield "id" .= x.Id
+                yield "name" .= x.Name
+            } |> jobj
+
+        static member FromJson(json : JsonValue) =
+            jsonParse {
+                let! id = json .@ "id"
+                let! name = json .@? "name"
+
+                return { Id = id; Name = name }
+            }
+
 ***
 ## Embrace the culture of automation
 * each microservice describes its own build/deploy pipeline
     * Jenkins Pipeline + Blue Ocean plugins + Jenkinsfile
 * containerization and clusterization
 * dashboard for monitoring the microservices
+
+***
+## Demo
+* Producer and Consumer written in F# for .Net Core platform
+* Boostrap Dev environment in Docker using Docker Compose
+* Debug services running in Docker container
 
 ***
 ## Conclusions
