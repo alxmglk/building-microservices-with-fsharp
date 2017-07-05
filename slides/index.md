@@ -30,7 +30,7 @@ https://martinfowler.com/bliki/MonolithFirst.html
 
 ***
 ## Microservices to the rescue
-<img src="images/microservices.png" style="background: transparent; border-style: none;"  />
+<img src="images/microservices-2.png" style="background: transparent; border-style: none;"  />
 
 <small>Small autonomous services that work together and modelled around a business domain</small>
 
@@ -140,22 +140,31 @@ Slow failures propagate from the dependencies up to the consumers
         req.Headers.Add ("Correlation-Id", correlationId)
         req
 
-    // HttpRequestMessage -> Async<HttpResponseMessage>
+    // HttpRequestMessage -> Async<HttpRespo    nseMessage>
     let makeHttpRequestWithCorrelationId = 
         makeHttpRequest 
         |> AsyncArrow.mapIn (injectCorrelationId correlationId)
 
-***
-## API Evolution
-* strangler pattern for evolving API
-* Postel's law
-* write consumer tests on the API and run them on each check in of the producer
-* avoid non-explicit serialization
+---
+## Monitoring
+* monitor the infrastructure and service stats (response time, requests per second)
+* setup triggers to be able to react quickly to the deviations and failures in your infrastructure and services
 
 ***
 ## Functional composition is a powerful technique
 
-Due to rich capabilities of functional composition you could easily address cross-cutting concerns (retries, timeouts, logging etc) without any changes to your business logic
+Due to rich capabilities of functional composition you could easily address cross-cutting concerns like retries, timeouts, logging etc without any affects to your business logic
+
+***
+## Microservice API management
+* adhere to the Postel's law
+* write consumer tests on the API and run them on each check in of the producer
+* auto-document your API (swagger)
+* avoid breaking changes whenever you can
+
+---
+## Postel's law
+Be conservative in what you send, be liberal in what you accept
 
 ***
 ## Embrace the culture of automation
@@ -163,13 +172,20 @@ Due to rich capabilities of functional composition you could easily address cros
     * Jenkins Pipeline + Blue Ocean plugins + Jenkinsfile
 * containerization and clusterization
 * dashboard for monitoring the microservices
-* 
 
 ***
 ## Conclusions
 * Microservices architecture gives you a lot of perks but in the same time requires a decent level of expertise for the team
-* F# and functional approach work greate for the microservices
-* 
+* F# and functional approach work perfrect for the microservices, especially in comparison to object-oriented languages
 
 ***
 ## Questions?
+
+***
+## References
+* http://blog.ploeh.dk/2016/03/18/functional-architecture-is-ports-and-adapters
+* https://youtu.be/PFQnNFe27kU
+* https://youtu.be/US8QG9I1XW0
+* https://martinfowler.com/articles/microservices.html
+* https://troykershaw.com/the-asyncarrow
+* http://blog.iancartwright.com/2006/11/dangers-of-serialization.html
