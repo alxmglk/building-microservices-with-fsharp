@@ -13,22 +13,6 @@ Alexander Mogilka
 [@alxmglk](http://www.twitter.com/alxmglk)
 
 ***
-## Let's start with a monolith
-
-<img src="images/monolith.png" style="background: transparent; border-style: none;"  />
-
----
-## Limitations and possible issues
-* it’s difficult to distribute responsibility across the team members and manage release cycle as project and team size grow
-* you ought to retest the entire system even if you did only a small change
-* it's not possible to scale the system efficiently
-* increased fragility since error in a single module might kill the entire system
-
----
-## But the monolith is a good way to start out!
-https://martinfowler.com/bliki/MonolithFirst.html
-
-***
 ## Microservices to the rescue
 <img src="images/microservices-2.png" style="background: transparent; border-style: none;"  />
 
@@ -39,22 +23,21 @@ https://martinfowler.com/bliki/MonolithFirst.html
 * independent release cycle of each service
 * failures are isolated
 * granular scaling
-* freedom to choose the tech stack suitable for particular task
+* freedom to choose the tech stack
 
 ---
 ## How about challenges?
-#### Welcome to <strike>hell</strike> the world of distributed systems
 * everything fails all the time
 * additional overhead of the remote calls
 * take care of the inter-microservice contracts
 * increased operational costs
 
+---
+## Welcome to <strike>hell</strike> the world of distributed systems
+<img src="images/dramatic.gif" style="background: transparent; border-style: none;" width="500px" />
+
 ***
-## Reduce the impact of failures
-* don't ever use synchronous calls
-* fail fast
-* minimize allotted timeouts
-* make failures observable
+## We cannot eliminate the failures but we c
 
 ***
 ## Synchronous calls are pure evil
@@ -81,7 +64,7 @@ A bunch of parallel synchronous calls will suddenly exhaust the thread pool
     getMerchantDiscount >> Async.bind (getProductPrice productId)
 
 ***
-## Why it's important to fail fast
+## Fail fast
 Slow failures propagate from the dependencies up to the consumers
 
 <img src="images/microservices-slow-failures.png" style="border-style: none;" width="60%"  />
@@ -154,7 +137,7 @@ Slow failures propagate from the dependencies up to the consumers
 ***
 ## Functional composition is a powerful feature
 
-Due to rich capabilities of functional composition you could easily address cross-cutting concerns like retries, timeouts, logging etc without any affects to your business logic
+Due to the rich capabilities of functional composition you could easily address cross-cutting concerns like retries, timeouts, logging etc without any affects to your business logic
 
 ***
 ## Microservice API management
@@ -204,7 +187,7 @@ Be conservative in what you send, be liberal in what you accept
 
 ***
 ## Conclusions
-* Microservices architecture gives you a lot of perks but in the same time requires a decent level of expertise for the team
+* Microservices architecture solves a lot of problems but in the same time requires you to adopt a number of practices
 * F# and functional approach work perfrect for the microservices, especially in comparison to object-oriented languages
 
 ***
