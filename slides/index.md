@@ -162,20 +162,13 @@ Due to the rich capabilities of functional composition you could easily address 
             }
 
 ***
-## Embrace the culture of automation
-* each microservice describes its own build/deploy pipeline
-    * Jenkins Pipeline + Blue Ocean plugins + Jenkinsfile
-* containerization and clusterization
-* dashboard for monitoring the microservices
-
-***
 ## Demo
 <img src="images/microservices-demo.png" style="background: transparent;"  />
 #### F# / .Net Core / Docker / vsdbg
 
 ***
 ## Conclusion
-* Microservices architecture solves a lot of problems but in the same time requires you to adopt a number of practices
+* Microservices architecture provides a lot of benefits but at the same time requires you to adopt a number of advanced practices
 * F# and functional paradigm work perfect for the microservices, especially in comparison to the object-oriented languages
 
 ***
@@ -183,9 +176,9 @@ Due to the rich capabilities of functional composition you could easily address 
 
 ***
 ## References
-* http://blog.ploeh.dk/2016/03/18/functional-architecture-is-ports-and-adapters
 * https://youtu.be/PFQnNFe27kU
 * https://youtu.be/US8QG9I1XW0
+* http://blog.ploeh.dk/2016/03/18/functional-architecture-is-ports-and-adapters
 * https://martinfowler.com/articles/microservices.html
 * https://troykershaw.com/the-asyncarrow
 * http://blog.iancartwright.com/2006/11/dangers-of-serialization.html
