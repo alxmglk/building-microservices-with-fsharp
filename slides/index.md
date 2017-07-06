@@ -37,7 +37,7 @@ Alexander Mogilka
 <img src="images/dramatic.gif" style="background: transparent; border-style: none;" width="500px" />
 
 ***
-## We cannot eliminate the failures but we can minimize the impact
+## We cannot eliminate failures but we can minimize the impact
 
 ***
 ## Synchronous calls are pure evil
