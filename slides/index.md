@@ -37,7 +37,7 @@ Alexander Mogilka
 <img src="images/dramatic.gif" style="background: transparent; border-style: none;" width="500px" />
 
 ***
-## We cannot eliminate the failures but we c
+## We cannot eliminate the failures but we can minimize the impact
 
 ***
 ## Synchronous calls are pure evil
@@ -91,9 +91,8 @@ Slow failures propagate from the dependencies up to the consumers
 
 ***
 ## Make failures discoverable
-* collect and aggregate logs
+* collect and aggregate logs with metrics
     * don't forget about correlation ids
-* collect and aggregate metrics
 * monitoring
 
 ---
@@ -129,30 +128,19 @@ Slow failures propagate from the dependencies up to the consumers
         makeHttpRequest 
         |> AsyncArrow.mapIn (injectCorrelationId correlationId)
 
----
-## Monitoring
-* monitor the infrastructure and service stats (response time, requests per second)
-* setup triggers to be able to react quickly to the deviations and failures in your infrastructure and services
-
 ***
-## Functional composition is a powerful feature
+## Functional composition is sweet
 
-Due to the rich capabilities of functional composition you could easily address cross-cutting concerns like retries, timeouts, logging etc without any affects to your business logic
+Due to the rich capabilities of functional composition you could easily address cross-cutting concerns like retries, timeouts, logging etc without any changes to your business logic
 
 ***
 ## Microservice API management
 * adhere to the Postel's law
 * write consumer tests on the API and run them on each check in of the producer
-* auto-document your API (swagger)
-* avoid breaking changes whenever you can
-
----
-## Postel's law
-Be conservative in what you send, be liberal in what you accept
+* document your API (Swagger)
 
 ---
 ## Explicit serialization
-
      type User = {
         Id : Guid
         Name : string
@@ -166,6 +154,7 @@ Be conservative in what you send, be liberal in what you accept
 
         static member FromJson(json : JsonValue) =
             jsonParse {
+                // .@ : JsonValue<'A>; id : Guid
                 let! id = json .@ "id"
                 let! name = json .@? "name"
 
@@ -181,14 +170,13 @@ Be conservative in what you send, be liberal in what you accept
 
 ***
 ## Demo
-* Producer and Consumer written in F# for .Net Core platform
-* Boostrap Dev environment in Docker using Docker Compose
-* Debug services running in Docker container
+<img src="images/microservices-demo.png" style="background: transparent;"  />
+#### F# / .Net Core / Docker / vsdbg
 
 ***
-## Conclusions
+## Conclusion
 * Microservices architecture solves a lot of problems but in the same time requires you to adopt a number of practices
-* F# and functional approach work perfrect for the microservices, especially in comparison to object-oriented languages
+* F# and functional paradigm work perfect for the microservices, especially in comparison to the object-oriented languages
 
 ***
 ## Questions?
