@@ -175,7 +175,7 @@ Due to the rich capabilities of functional composition you could easily address 
 ## Questions?
 
 ***
-## References
+## Resources
 * https://youtu.be/PFQnNFe27kU
 * https://youtu.be/US8QG9I1XW0
 * http://blog.ploeh.dk/2016/03/18/functional-architecture-is-ports-and-adapters
