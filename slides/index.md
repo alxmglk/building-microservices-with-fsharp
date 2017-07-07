@@ -163,8 +163,9 @@ Due to the rich capabilities of functional composition you could easily address 
 
 ***
 ## Demo
-<img src="images/microservices-demo.png" style="background: transparent;"  />
+<img src="images/microservices-demo.png" style="background: transparent;" width="70%"  />
 #### F# / .Net Core / Docker / vsdbg
+[https://github.com/alxmglk/kafka-fsharp-sample](https://github.com/alxmglk/kafka-fsharp-sample)
 
 ***
 ## Conclusion
