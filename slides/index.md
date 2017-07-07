@@ -175,10 +175,9 @@ Due to the rich capabilities of functional composition you could easily address 
 ## Questions?
 
 ***
-## Resources
-* https://youtu.be/PFQnNFe27kU
-* https://youtu.be/US8QG9I1XW0
-* http://blog.ploeh.dk/2016/03/18/functional-architecture-is-ports-and-adapters
+## Useful links
 * https://martinfowler.com/articles/microservices.html
+* https://youtu.be/PFQnNFe27kU
 * https://troykershaw.com/the-asyncarrow
-* http://blog.iancartwright.com/2006/11/dangers-of-serialization.html
+* https://monkey.org/~marius/funsrv.pdf
+* https://martinfowler.com/bliki/TolerantReader.html
