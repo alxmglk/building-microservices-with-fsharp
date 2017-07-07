@@ -14,7 +14,7 @@ Alexander Mogilka
 
 ***
 ## Microservices to the rescue
-<img src="images/microservices-2.png" style="background: transparent; border-style: none;"  />
+<img src="images/microservices.png" style="background: transparent; border-style: none;"  />
 
 <small>Small autonomous services that work together and modelled around a business domain</small>
 
